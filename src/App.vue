@@ -1,23 +1,22 @@
-
-<script setup>
-
-import MiComponente from './components/MiComponente.vue';
-</script>
-
 <template>
-  <header>
-    <img alt="facelift" class="logo" src="./assets/facelift.jpg" width="125" height="125" />
-
-    <div class="wrapper">
-      <MiComponente msg="EL MEJOR ALBUM DE ALICE IN CHAINS" />
-    </div>
-  </header>
+  <div>
+    <!-- Componente del encabezado -->
+    <header-component />
+    
+    <!-- Usar router-view para mostrar componentes dinámicamente según la ruta -->
+    <router-view></router-view>
+    
+    <!-- Componente del pie de página -->
+    <footer-component />
+  </div>
 </template>
 
-<component :is="componentId">
+<script setup>
+// Importa los componentes del encabezado y del pie de página
+import HeaderComponent from "./components/header-component.vue";
+import FooterComponent from "./components/footer-component.vue";
+</script>
 
-
-
-
-
-</component>
+<style>
+/* Puedes agregar estilos específicos para este componente aquí */
+</style>

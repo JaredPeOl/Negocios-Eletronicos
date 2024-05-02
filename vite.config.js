@@ -9,8 +9,11 @@ export default defineConfig({
     vue(),
   ],
   resolve: {
+    base: '/assets',
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
+
+  
 })
