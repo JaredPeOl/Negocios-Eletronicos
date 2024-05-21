@@ -3,37 +3,32 @@
   <footer>
     <!-- Lista de enlaces de navegación -->
     <ul>
-      <!-- Enlace a la página de contacto -->
+      <!-- Enlaces a las diferentes páginas -->
       <li>
         <router-link to="/contacto">
           <p>Contactanos</p>
         </router-link>
       </li>
-      <!-- Enlace a la página de aviso de privacidad -->
       <li>
         <router-link to="#">
           <p>Aviso de Privacidad Integral</p>
         </router-link>
       </li>
-      <!-- Enlace a la página de términos y condiciones -->
       <li>
         <router-link to="/terminos">
           <p>Términos y Condiciones</p>
         </router-link>
       </li>
-      <!-- Enlace a la página de propiedad intelectual -->
       <li>
         <router-link to="/propiedad">
           <p>Propiedad intelectual</p>
         </router-link>
       </li>
-      <!-- Enlace a la página de legales -->
       <li>
         <router-link to="#">
           <p>Legales</p>
         </router-link>
       </li>
-      <!-- Enlace a la página de devoluciones -->
       <li>
         <router-link to="#">
           <p>Devoluciones</p>
@@ -48,6 +43,28 @@
 </script>
 
 <style lang="scss">
-// Importa estilos definidos en el archivo style.scss
-@import '../assets/style.scss';
+/* Estilos específicos del pie de página */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #333;
+  color: white;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+ul li {
+  display: inline-block;
+  margin: 10px;
+}
+
+ul li p {
+  margin: 0;
+  cursor: pointer;
+}
 </style>

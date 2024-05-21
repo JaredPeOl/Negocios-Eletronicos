@@ -1,13 +1,12 @@
 <template>
-  <!-- La estructura principal de la página -->
   <main>
     <div>
-      <!-- Encabezado de la sección de consolas -->
       <h1>Articulos</h1>
-
-      <!-- Contenedor de las tarjetas de consolas -->
       <div class="tarjeta-container">
-        <!-- Iterar sobre las consolas y mostrar sus detalles en tarjetas -->
+        <h1>Consolas</h1>
+
+      </div>
+      <div class="tarjeta-container">
         <div v-for="consola in consolas" :key="consola.id" class="tarjeta">
           <h2>{{ consola.nombre }}</h2>
           <img :src="consola.img" alt="Img">
@@ -18,66 +17,92 @@
         </div>
       </div>
 
-      <!-- Sección del carrito -->
-      <div id="carrito">
-        <!-- Mostrar carrito solo si hay productos agregados -->
-       
-          <!-- Opciones de método de pago -->
-          <div>
-            <label for="metodoPago">Seleccione Método de Pago:</label>
-            <select v-model="metodoPago" id="metodoPago">
-              <option value="Efectivo">Efectivo</option>
-              <option value="Tarjeta">Tarjeta</option>
-            </select>
-          </div>
+      <div class="tarjeta-container">
+        <h1>Computadoras</h1>
+      </div>
+      <div class="tarjeta-container">
+        
+        <!-- Mostrar computadoras -->
+        <div v-for="computadora in computadoras" :key="computadora.id" class="tarjeta">
+          <h2>{{ computadora.nombre }}</h2>
+          <img :src="computadora.img" alt="Img">
+          <p>Marca: {{ computadora.marca }}</p>
+          <p>Precio: ${{ computadora.precio }}</p>
+          <p>Existencia: {{ computadora.existencia }}</p>
+          <button @click="agregarAlCarrito(computadora)" class="botoncin">Agregar al carrito</button>
+        </div>
+      </div>
+      <div class="tarjeta-container">
+  <h1>Audio y Video</h1>
+  </div>
+      <div class="tarjeta-container">
+  <div v-for="audioVideo in audioVideos" :key="audioVideo.id" class="tarjeta">
+    <h2>{{ audioVideo.nombre }}</h2>
+    <img :src="audioVideo.img" alt="Img">
+    <p>Marca: {{ audioVideo.marca }}</p>
+    <p>Precio: ${{ audioVideo.precio }}</p>
+    <p>Existencia: {{ audioVideo.existencia }}</p>
+    <button @click="agregarAlCarrito(audioVideo)" class="botoncin">Agregar al carrito</button>
+  </div>
+</div>
 
-          <!-- Ventana flotante para ingresar detalles de tarjeta -->
-          <div v-if="metodoPago === 'Tarjeta'" class="modal">
-            <div class="modal-content">
-              <label for="numeroTarjeta">Número de Tarjeta:</label>
-              <input v-model="numeroTarjeta" type="text" id="numeroTarjeta">
 
-              <!-- Otros campos de la tarjeta (fecha de vencimiento, etc.) -->
+      <!-- Botón para abrir/cerrar el carrito -->
+      <button class="toggle-carrito" @click="toggleCarrito">
+        {{ carritoVisible ? 'Cerrar Carrito' : 'Abrir Carrito' }}
+      </button>
 
-              <div>
-                <button @click="aceptarTarjeta">Aceptar</button>
-                <button @click="cancelarTarjeta">Cancelar</button>
-              </div>
-            </div>
-          </div>
-
+      <!-- Sección del carrito en el lateral -->
+      <div id="carrito" :class="{ 'carrito-visible': carritoVisible }">
+        <div class="carrito-content">
           <h2>Carrito</h2>
 
-          <!-- Iterar sobre los productos agregados al carrito y mostrar detalles -->
-          <div v-for="productoAgregado in productosAgregados" :key="productoAgregado.consola.id"
-            class="producto-agregado">
-            <div class="producto-info">
-              <img :src="productoAgregado.consola.img" alt="Producto">
-              <span>
-                {{ productoAgregado.consola.nombre }} <br>
-                Cantidad: {{ productoAgregado.cantidad }} Total: ${{ productoAgregado.total.toFixed(2) }}
-              </span>
+          <div v-if="productosAgregados.length">
+            <div v-for="productoAgregado in productosAgregados" :key="productoAgregado.consola.id"
+              class="producto-agregado">
+              <div class="producto-info">
+                <img :src="productoAgregado.consola.img" alt="Producto">
+                <span>
+                  {{ productoAgregado.consola.nombre }} <br>
+                  Cantidad: {{ productoAgregado.cantidad }} Total: ${{ productoAgregado.total.toFixed(2) }}
+                </span>
+              </div>
+              <br>
+              <button @click="restarDelCarrito(productoAgregado)" class="restar"
+                :data-id="productoAgregado.consola.id">Restar</button>
             </div>
-            <br>
-            <!-- Botón para restar del carrito -->
-            <button @click="restarDelCarrito(productoAgregado)" class="restar"
-              :data-id="productoAgregado.consola.id">Restar</button>
+
+            <p>Total Compra: ${{ carritoTotal.toFixed(2) }}</p>
+            <p>Método de Pago: {{ metodoPago }}</p>
+            <div>
+              <label for="metodoPago">Seleccione Método de Pago:</label>
+              <select v-model="metodoPago" id="metodoPago">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+              </select>
+            </div>
+
+            <div v-if="metodoPago === 'Tarjeta'" class="modal">
+              <div class="modal-content">
+                <label for="numeroTarjeta">Número de Tarjeta:</label>
+                <input v-model="numeroTarjeta" type="text" id="numeroTarjeta">
+                <div>
+                  <button @click="aceptarTarjeta">Aceptar</button>
+                  <button @click="cancelarTarjeta">Cancelar</button>
+                </div>
+              </div>
+            </div>
+
+            <button @click="confirmarCompra" id="btnPagar">Pagar</button>
           </div>
-
-          <!-- Mostrar el total de la compra, método de pago y botón de pagar -->
-          <p>Total Compra: ${{ carritoTotal.toFixed(2) }}</p>
-          <p>Método de Pago: {{ metodoPago }}</p>
-          <button @click="confirmarCompra" id="btnPagar">Pagar</button>
-
-        
+          <div v-else>
+            <p>El carrito está vacío.</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>
 </template>
-
-<!-- Resto del código -->
-
-
 
 <script setup>
 import { db } from "../assets/firebase.js";
@@ -86,19 +111,30 @@ import { ref, onMounted } from "vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from 'vue-router';
 
+const audioVideos = ref([]);
 const consolas = ref([]);
+const computadoras = ref([]);
 const productosAgregados = ref([]);
 let carritoTotal = ref(0);
 const router = useRouter();
-const confirmacionCompra = ref(false); // Variable para rastrear si la compra ha sido confirmada
-const metodoPago = ref("Efectivo"); // Inicialmente, establecer como "Efectivo"
+const confirmacionCompra = ref(false);
+const metodoPago = ref("Efectivo");
 const numeroTarjeta = ref("");
+const carritoVisible = ref(false); // Variable para manejar la visibilidad del carrito
 
 onMounted(async () => {
   cargarCarritoDesdeLocalStorage();
   let consolasCollection = await getDocs(collection(db, 'consolas'));
   consolasCollection.forEach((consola) => {
     consolas.value.push({ ...consola.data(), id: consola.id });
+  });
+  let computadorasCollection = await getDocs(collection(db, 'Computadoras'));
+  computadorasCollection.forEach((computadora) => {
+    computadoras.value.push({ ...computadora.data(), id: computadora.id });
+  });
+  let audioVideoCollection = await getDocs(collection(db, 'audioVideo'));
+  audioVideoCollection.forEach((audioVideo) => {
+    audioVideos.value.push({ ...audioVideo.data(), id: audioVideo.id });
   });
 });
 
@@ -115,7 +151,7 @@ const verificarInicioSesion = async () => {
       }
     });
   });
-}; 
+};
 
 const agregarAlCarrito = async (consola) => {
    const inicioSesion = await verificarInicioSesion(); 
@@ -155,48 +191,53 @@ const agregarAlCarrito = async (consola) => {
 };
 
 const restarDelCarrito = async (productoAgregado) => {
-   const inicioSesion = await verificarInicioSesion(); 
+  const inicioSesion = await verificarInicioSesion();
 
-   if (inicioSesion) { 
+  if (inicioSesion) {
     if (productoAgregado.cantidad > 0) {
-      const consolaExistente = productosAgregados.value.find(item => item.consola.id === productoAgregado.consola.id);
-      consolaExistente.cantidad--;
-      consolaExistente.total -= productoAgregado.consola.precio;
+      const index = productosAgregados.value.findIndex(item => item.consola.id === productoAgregado.consola.id);
 
-      carritoTotal.value -= productoAgregado.consola.precio;
-      carritoTotal.value = parseFloat(carritoTotal.value.toFixed(2));
+      if (index !== -1) {
+        const consolaExistente = productosAgregados.value[index];
+        consolaExistente.cantidad--;
+        consolaExistente.total -= productoAgregado.consola.precio;
 
-      productoAgregado.consola.existencia++;
+        carritoTotal.value -= productoAgregado.consola.precio;
+        carritoTotal.value = parseFloat(carritoTotal.value.toFixed(2));
 
-      // Actualizar existencia en Firestore solo si no se ha confirmado la compra
-      if (!confirmacionCompra.value) {
-        // eslint-disable-next-line no-undef
-        await actualizarExistencia(productoAgregado.consola);
+        if (consolaExistente.cantidad === 0) {
+          // Si la cantidad llega a 0, eliminar el producto del carrito
+          productosAgregados.value.splice(index, 1);
+        }
+
+        productoAgregado.consola.existencia++;
+
+        if (!confirmacionCompra.value) {
+          await actualizarExistencia(productoAgregado.consola);
+        }
+
+        guardarCarritoEnLocalStorage();
       }
-
-      guardarCarritoEnLocalStorage();
     } else {
       alert('No se puede restar más');
     }
-  } 
+  }
 };
+
 
 const confirmarCompra = async () => {
    const inicioSesion = await verificarInicioSesion();
  
   if (inicioSesion) { 
     if (carritoTotal.value > 0) {
-      // Construir un mensaje con los detalles de la compra
       const mensaje = productosAgregados.value
         .filter(agregada => agregada.cantidad > 0)
         .map(agregada => `${agregada.cantidad} ${agregada.consola.nombre} - Total: $${agregada.total.toFixed(2)}`)
         .join('\n');
 
-      // Confirmar la compra con el usuario
       const confirmarCompra = window.confirm(`¿Está seguro de proceder con la compra?\n${mensaje}\nTotal de la compra: $${carritoTotal.value}\nMétodo de Pago: ${metodoPago.value}`);
 
       if (confirmarCompra) {
-        // Actualizar la existencia de los productos comprados en Firestore
         for (const productoAgregado of productosAgregados.value) {
           const consolaRef = doc(db, 'consolas', productoAgregado.consola.id);
           await updateDoc(consolaRef, {
@@ -204,10 +245,9 @@ const confirmarCompra = async () => {
           });
         }
 
-        // Limpiar el carrito después de realizar cambios en la base de datos
         productosAgregados.value = [];
         carritoTotal.value = 0;
-        confirmacionCompra.value = true; // Indicar que la compra ha sido confirmada
+        confirmacionCompra.value = true;
         guardarCarritoEnLocalStorage();
 
         alert('Compra realizada con éxito');
@@ -222,25 +262,17 @@ const confirmarCompra = async () => {
 };
 
 const aceptarTarjeta = () => {
-  // Validar el número de tarjeta u otros campos según sea necesario
   if (numeroTarjeta.value.trim() === "") {
     alert("Por favor, ingrese un número de tarjeta válido.");
     return;
   }
 
-  
-  // Actualizar la variable metodoPago antes de confirmar la compra
   metodoPago.value = "Tarjeta";
-
-  // Cierra la ventana flotante
   cerrarModal();
   confirmarCompra();
-
-  
 };
 
 const cancelarTarjeta = () => {
-  // Cierra la ventana flotante sin realizar ninguna acción
   location.reload()
 };
 
@@ -265,6 +297,9 @@ const cerrarModal = () => {
   numeroTarjeta.value = ""; 
 };
 
+const toggleCarrito = () => {
+  carritoVisible.value = !carritoVisible.value;
+};
 </script>
 
 <style>
@@ -292,16 +327,40 @@ h1 {
   height: auto;
 }
 
+.toggle-carrito {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
 #carrito {
-  text-align: center;
-  margin: 0 auto; 
-  max-width: 600px; 
+  position: fixed;
+  top: 60px; /* Ajuste para que no oculte el header */
+  right: -400px; /* Carrito inicialmente oculto */
+  width: 400px;
+  height: calc(100% - 160px); /* Ajuste de altura para dejar espacio para el header y el footer */
+  background-color: #f8f9fa;
+  overflow-y: auto;
+  transition: right 0.3s ease;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#carrito.carrito-visible {
+  right: 0; /* Mostrar carrito cuando está visible */
+}
+
+.carrito-content {
+  padding: 20px;
 }
 
 .producto-agregado {
-  text-align: left; 
+  text-align: left;
 }
-/* Estilos CSS para el modal */
+
 .modal {
   position: fixed;
   top: 0;
@@ -309,7 +368,6 @@ h1 {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  /* Fondo oscuro */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -319,5 +377,11 @@ h1 {
   background: #fff;
   padding: 20px;
   border-radius: 5px;
+}
+
+/* Asegura que el contenido principal no se solape con el carrito */
+main {
+  padding-bottom: 100px; /* Deja espacio para el footer */
+  padding-top: 60px; /* Deja espacio para el header */
 }
 </style>

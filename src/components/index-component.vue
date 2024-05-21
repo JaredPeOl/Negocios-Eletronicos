@@ -37,6 +37,8 @@
 </template>
 
 <style lang="scss">
+
+
 // Importa estilos definidos en el archivo style.scss
 @import '../assets/style.scss';
 </style>
