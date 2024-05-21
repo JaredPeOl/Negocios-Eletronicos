@@ -83,15 +83,17 @@
             </div>
 
             <div v-if="metodoPago === 'Tarjeta'" class="modal">
-              <div class="modal-content">
-                <label for="numeroTarjeta">Número de Tarjeta:</label>
-                <input v-model="numeroTarjeta" type="text" id="numeroTarjeta">
-                <div>
-                  <button @click="aceptarTarjeta">Aceptar</button>
-                  <button @click="cancelarTarjeta">Cancelar</button>
-                </div>
-              </div>
-            </div>
+  <div class="modal-content">
+    <h2>Ingrese los detalles de su tarjeta</h2>
+    <label for="numeroTarjeta">Número de Tarjeta:</label>
+    <input v-model="numeroTarjeta" type="text" id="numeroTarjeta" placeholder="1234 5678 9012 3456">
+    <div>
+      <button @click="aceptarTarjeta">Pagar</button>
+      <button @click="cancelarTarjeta">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 
             <button @click="confirmarCompra" id="btnPagar">Pagar</button>
           </div>
@@ -371,13 +373,46 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999; /* Asegura que el modal esté por encima de todo */
 }
 
 .modal-content {
   background: #fff;
-  padding: 20px;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+.modal-content button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
 
 /* Asegura que el contenido principal no se solape con el carrito */
 main {
